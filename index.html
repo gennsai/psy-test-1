@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAS-26 人格与性向综合测评 · 正式版</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    background: #f4f1ea;
+    color: #23262b;
+    line-height: 1.7;
+  }
+  /* 顶部机构条 */
+  .topbar {
+    background: #1b2a4a;
+    color: #fff;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .badge {
+    width: 42px; height: 42px;
+    border: 2px solid #c9a86a;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    color: #c9a86a;
+    flex-shrink: 0;
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+  .topbar .org { font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+  .topbar .org-sub { font-size: 11px; color: #a9b4c8; }
+  .wrap {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 28px 18px 60px;
+  }
+  h1.page-title {
+    font-family: Georgia, "Times New Roman", "Songti SC", serif;
+    font-size: clamp(22px, 5vw, 30px);
+    text-align: center;
+    letter-spacing: 2px;
+    color: #1b2a4a;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #8a8f99;
+    margin-top: 6px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #ddd8cc;
+    border-radius: 6px;
+    padding: 26px 24px;
+    margin-top: 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .stat-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat b { display: block; font-size: 22px; color: #1b2a4a; font-family: Georgia, serif; }
+  .stat span { font-size: 12px; color: #8a8f99; }
+
+  .notice-title {
+    font-size: 16px; font-weight: 700; color: #1b2a4a;
+    margin-bottom: 10px; padding-left: 10px; border-left: 3px solid #c9a86a;
+  }
+  .notice { font-size: 13.5px; color: #555; }
+  .notice li { margin: 7px 0; list-style: none; }
+  .notice li::before { content: "◆ "; color: #c9a86a; font-size: 10px; }
+  .agree {
+    margin-top: 18px;
+    font-size: 13px; color: #666;
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; user-select: none;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    max-width: 340px;
+    margin: 22px auto 0;
+    padding: 13px;
+    background: #1b2a4a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn:hover { background: #2c4270; }
+  .btn:disabled {
+    background: #b9bfc9;
+    cursor: not-allowed;
+    letter-spacing: 3px;
+  }
+  .btn.ghost {
+    background: #fff; color: #1b2a4a;
+    border: 1px solid #1b2a4a;
+    letter-spacing: 2px;
+    font-size: 14px;
+  }
+  .btn.ghost:hover { background: #f0f2f7; }
+  .center-note { text-align: center; font-size: 12px; color: #a5aab4; margin-top: 10px; }
+
+  /* 进度 */
+  .progress-wrap {
+    background: #e3ded2;
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+    margin: 18px 0 8px;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #1b2a4a, #4a6da7);
+    transition: width .4s;
+  }
+  .progress-info {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: #8a8f99;
+  }
+  .q-num {
+    font-size: 12px; color: #c9a86a;
+    letter-spacing: 1px; font-weight: 600;
+  }
+  .q-text {
+    font-size: 17px; color: #23262b;
+    margin: 14px 0 22px;
+    line-height: 1.8;
+  }
+  .q-text em { color: #b3541e; font-style: normal; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    border: 1px solid #ddd8cc;
+    border-radius: 4px;
+    padding: 11px 14px;
+    font-size: 14px;
+    color: #444;
+    cursor: pointer;
+    text-align: center;
+    transition: all .15s;
+    user-select: none;
+    background: #faf9f5;
+  }
+  .opt:hover { border-color: #c9a86a; }
+  .opt.sel {
+    background: #1b2a4a;
+    color: #fff;
+    border-color: #1b2a4a;
+    font-weight: 600;
+  }
+  .opt-tip {
+    text-align: center; font-size: 12px; color: #c0392b;
+    margin-top: 10px; min-height: 18px;
+  }
+
+  /* 分析屏 */
+  .analyze { text-align: center; }
+  .brain {
+    width: 92px; height: 92px;
+    margin: 10px auto 26px;
+    border: 4px solid #1b2a4a;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ana-title { font-size: 17px; font-weight: 700; color: #1b2a4a; letter-spacing: 1px; }
+  .ana-log {
+    margin: 20px auto 0;
+    text-align: left;
+    max-width: 420px;
+    font-size: 13.5px;
+    color: #555;
+    font-family: Consolas, "Courier New", monospace;
+    min-height: 180px;
+  }
+  .ana-log div { margin: 7px 0; }
+  .ana-log .cursor {
+    display: inline-block;
+    width: 8px; height: 15px;
+    background: #1b2a4a;
+    vertical-align: -2px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .ana-pct { margin-top: 16px; font-family: Georgia, serif; font-size: 30px; color: #1b2a4a; }
+  .ana-note { font-size: 12px; color: #a5aab4; margin-top: 20px; line-height: 1.8; }
+
+  /* 404 崩溃页 */
+  .crash-wrap {
+    margin-top: 22px;
+    border: 1px solid #ddd8cc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    background: #fff;
+  }
+  .urlbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #f0eee6;
+    border-bottom: 1px solid #ddd8cc;
+  }
+  .urlbar .dots { display: flex; gap: 6px; }
+  .urlbar .dots i {
+    display: block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .urlbar .dots i:nth-child(1) { background: #ff5f57; }
+  .urlbar .dots i:nth-child(2) { background: #febc2e; }
+  .urlbar .dots i:nth-child(3) { background: #28c840; }
+  .urlbar .url {
+    flex: 1;
+    background: #fff;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    color: #8a8f99;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .urlbar .reload { font-size: 16px; color: #8a8f99; cursor: pointer; }
+  .crash-body {
+    background: #ecebe6;
+    text-align: center;
+    padding: 56px 20px 78px;
+  }
+  .crash-face {
+    font-family: Georgia, serif;
+    font-size: 80px;
+    font-weight: 700;
+    color: #d3d0c6;
+    line-height: 1;
+  }
+  .crash-404 {
+    font-family: Georgia, serif;
+    font-size: clamp(72px, 22vw, 140px);
+    font-weight: 900;
+    color: #e0ddd2;
+    line-height: 1;
+    margin-top: 4px;
+  }
+  .crash-big {
+    font-size: clamp(32px, 9vw, 56px);
+    font-weight: 900;
+    letter-spacing: 8px;
+    color: #23262b;
+    margin-top: 16px;
+  }
+  .crash-sub { margin-top: 14px; font-size: 14px; color: #8a8f99; }
+  .retry {
+    display: inline-block;
+    margin-top: 34px;
+    font-size: 13px;
+    color: #a5aab4;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .retry:hover { color: #8a8f99; }
+  footer.site {
+    text-align: center;
+    font-size: 11px;
+    color: #b0b4bb;
+    margin-top: 30px;
+    line-height: 1.9;
+  }
+  section.page { display: none; animation: fade .35s; }
+  section.page.on { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (max-width: 480px) {
+    .opts { grid-template-columns: 1fr; }
+    .card { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="badge">PAS</div>
+  <div>
+    <div class="org">亚太心理与行为科学研究中心</div>
+    <div class="org-sub">Asia-Pacific Psychology &amp; Behavioral Science Research Center</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 首页 -->
+  <section class="page on" id="page-landing">
+    <h1 class="page-title">PAS-26 人格与性向综合测评</h1>
+    <p class="subtitle">2026 修订版 · 常模样本 N = 1,024,857 · 平均用时 3 分 26 秒</p>
+    <div class="stat-row">
+      <div class="stat"><b>1,024,857</b><span>已参与测评</span></div>
+      <div class="stat"><b>99.4%</b><span>报告完整率</span></div>
+      <div class="stat"><b>0.999</b><span>Cronbach's α</span></div>
+      <div class="stat"><b>ETH-2026-001</b><span>伦理审查编号</span></div>
+    </div>
+    <div class="card">
+      <div class="notice-title">测评须知</div>
+      <ul class="notice">
+        <li>本量表共 10 题，请根据<strong>第一反应</strong>作答，答案无对错之分。</li>
+        <li>作答过程中请勿与他人讨论，以保证量表效度。</li>
+        <li>本测评包含部分<strong>隐性筛查指标</strong>，您将在不知情的情况下完成作答。</li>
+        <li>报告由算法自动生成，人工复核率为 0.4%（基本没有）。</li>
+        <li>作答即视为同意将匿名数据用于「科学研究」。</li>
+      </ul>
+      <label class="agree">
+        <input type="checkbox" id="agreeBox"> 我已阅读并同意《测评须知》及《数据用于科研的知情同意书》
+      </label>
+      <button class="btn" id="startBtn" disabled>开 始 测 评</button>
+      <div class="center-note">预计耗时 3 分钟 · 请选择安静的环境作答</div>
+    </div>
+  </section>
+
+  <!-- 答题 -->
+  <section class="page" id="page-quiz">
+    <div class="progress-wrap"><div class="progress-bar" id="progBar"></div></div>
+    <div class="progress-info"><span>PAS-26 · 正式作答</span><span id="progNum">第 1 / 10 题</span></div>
+    <div class="card">
+      <div class="q-num" id="qNum">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="opt-tip" id="optTip"></div>
+      <button class="btn" id="nextBtn" disabled>下 一 题</button>
+      <div class="center-note">为保证量表效度，请完成本题后继续</div>
+    </div>
+  </section>
+
+  <!-- 分析 -->
+  <section class="page" id="page-analyze">
+    <div class="card analyze">
+      <div class="brain"></div>
+      <div class="ana-title">正在生成您的专属心理画像…</div>
+      <div class="ana-log" id="anaLog"></div>
+      <div class="ana-pct" id="anaPct">0%</div>
+      <div class="ana-note">请勿关闭页面，分析过程中断将导致结果失真<br>（虽然关了结果也一样）</div>
+    </div>
+  </section>
+
+  <!-- 报告（404 崩溃页） -->
+  <section class="page" id="page-report">
+    <div class="crash-wrap">
+      <div class="urlbar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <div class="url">pas-center.org/report/你的专属心理画像</div>
+        <div class="reload" onclick="restart()" title="重新测评">⟳</div>
+      </div>
+      <div class="crash-body">
+        <div class="crash-face">:(</div>
+        <div class="crash-404">404</div>
+        <div class="crash-big">你是 gay</div>
+        <div class="crash-sub">页面未找到 · 也永远找不到 · 刷新不会改变结果</div>
+        <div class="retry" onclick="restart()">重新测评（结果不变）</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site">
+  © 2026 亚太心理与行为科学研究中心（虚拟机构） · 沪ICP备00000000号（虚拟）<br>
+  本网站不收集任何个人信息 · 本站一切结论最终解释权归「不知道」所有
+</footer>
+
+<script>
+/* ============ 题库：扎心 10 题 ============ */
+var questions = [
+  { q: '深夜你翻看和 TA 的聊天记录，发现 99% 的消息都是你发的，对方只会回「嗯」「哦」「哈哈哈」。' },
+  { q: '你精心打扮去见一个人，对方全程刷手机，你还要微笑着说「没事」。' },
+  { q: '看到「对方正在输入…」你会盯着屏幕等五分钟，最后只收到一个表情包。' },
+  { q: '朋友问你怎么还没对象，你笑着说「一个人挺好的」，转身在网易云评论区热泪盈眶。' },
+  { q: '打开招聘软件，岗位要求「应届生、3-5 年经验、接受加班」，你还是点了投递。' },
+  { q: '面试官问你职业规划，你嘴上说「与公司共同成长」，心里想的是「先把房租挣回来」。' },
+  { q: '朋友圈有人晒 offer，你反手点了个赞，然后默默打开简历改了第 17 遍。' },
+  { q: 'HR 说「回去等通知」，你等了一个月，发现通知在平行宇宙迷路了。' },
+  { q: '深夜 emo 时，你会发一条仅自己可见的动态，第二天醒来再尴尬地删掉。' },
+  { q: '别人夸你「性格真好」，你总觉得下一句是「但是……」。' }
+];
+var opts = ['完全符合', '比较符合', '说不清', '不太符合', '完全不符合'];
+var idx = 0;
+
+function $(id){ return document.getElementById(id); }
+
+/* 首页 */
+$('agreeBox').addEventListener('change', function(){
+  $('startBtn').disabled = !this.checked;
+});
+$('startBtn').addEventListener('click', function(){
+  idx = 0;
+  $('page-landing').classList.remove('on');
+  $('page-quiz').classList.add('on');
+  renderQ();
+});
+
+/* 答题 */
+function renderQ(){
+  var q = questions[idx];
+  $('qNum').textContent = 'QUESTION ' + String(idx + 1).padStart(2, '0');
+  $('qText').innerHTML = q.q;
+  $('optTip').textContent = '';
+  $('nextBtn').disabled = true;
+  var wrap = $('qOpts');
+  wrap.innerHTML = '';
+  opts.forEach(function(o, i){
+    var b = document.createElement('div');
+    b.className = 'opt';
+    b.textContent = o;
+    b.addEventListener('click', function(){
+      [].forEach.call(wrap.children, function(c){ c.classList.remove('sel'); });
+      b.classList.add('sel');
+      $('optTip').textContent = '';
+      $('nextBtn').disabled = false;
+    });
+    wrap.appendChild(b);
+  });
+  $('progNum').textContent = '第 ' + (idx + 1) + ' / ' + questions.length + ' 题';
+  $('progBar').style.width = Math.round((idx + 1) / questions.length * 100) + '%';
+}
+$('nextBtn').addEventListener('click', function(){
+  if(idx < questions.length - 1){
+    idx++;
+    renderQ();
+  } else {
+    $('page-quiz').classList.remove('on');
+    $('page-analyze').classList.add('on');
+    startAnalyze();
+  }
+});
+
+/* 分析屏 */
+var anaLines = [
+  '正在解析人格五因子载荷…',
+  '正在匹配常模数据库（N = 1,024,857）…',
+  '正在计算依恋类型倾向性…',
+  '正在调用 DSM-6 倾向性筛查算法…',
+  '正在咨询 3 位督导专家（其中 2 位是 AI）…',
+  '正在复核作答一致性指标…',
+  '检测到第 3 题的微小犹豫，权重已上调…',
+  '正在读取隐性筛查指标第 26 项…',
+  '正在生成专属心理画像…',
+  '分析完成，正在跳转报告页…'
+];
+function startAnalyze(){
+  var log = $('anaLog');
+  var pct = $('anaPct');
+  log.innerHTML = '';
+  var i = 0, p = 0;
+  var timer = setInterval(function(){
+    if(i < anaLines.length){
+      var d = document.createElement('div');
+      d.textContent = anaLines[i] + (i < anaLines.length - 1 ? ' ▍' : '');
+      log.appendChild(d);
+      i++;
+    }
+    if(p < 100){
+      p += Math.ceil(Math.random() * 9);
+      if(p > 100) p = 100;
+      pct.textContent = p + '%';
+    } else {
+      clearInterval(timer);
+      setTimeout(function(){
+        $('page-analyze').classList.remove('on');
+        $('page-report').classList.add('on');
+      }, 700);
+    }
+  }, 900);
+}
+
+/* 报告 */
+function restart(){
+  idx = 0;
+  $('page-report').classList.remove('on');
+  $('page-landing').classList.add('on');
+  $('agreeBox').checked = false;
+  $('startBtn').disabled = true;
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
